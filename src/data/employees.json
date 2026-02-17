@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "email": "alice.johnson@company.com",
+    "department": "Engineering",
+    "salary": 120000,
+    "joinDate": "2020-01-15",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "email": "bob.smith@company.com",
+    "department": "Sales",
+    "salary": 95000,
+    "joinDate": "2021-03-20",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "name": "Carol White",
+    "email": "carol.white@company.com",
+    "department": "Marketing",
+    "salary": 105000,
+    "joinDate": "2019-06-10",
+    "status": "active"
+  },
+  {
+    "id": 4,
+    "name": "David Brown",
+    "email": "david.brown@company.com",
+    "department": "Engineering",
+    "salary": 130000,
+    "joinDate": "2018-11-05",
+    "status": "active"
+  },
+  {
+    "id": 5,
+    "name": "Eva Davis",
+    "email": "eva.davis@company.com",
+    "department": "HR",
+    "salary": 85000,
+    "joinDate": "2022-02-14",
+    "status": "inactive"
+  }
+]
