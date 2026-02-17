@@ -1,38 +1,51 @@
 // Field configuration and operator mappings
+// This module defines all available fields for filtering and their associated operators
+// Serves as the single source of truth for filter configuration
 
 import type { FieldDefinition } from '../types/field.types';
 import type { Operator } from '../types/filter.types';
 
+/**
+ * Maps each operator type to its human-readable label
+ * Used in the UI to display operator options to the user
+ */
 export const OPERATOR_LABELS: Record<Operator, string> = {
-  // Text operators
+  // Text operators - for string field comparisons
   equals: 'Equals',
   contains: 'Contains',
   startsWith: 'Starts With',
   endsWith: 'Ends With',
   doesNotContain: 'Does Not Contain',
   
-  // Number operators
+  // Number operators - for numeric comparisons
   greaterThan: 'Greater Than',
   lessThan: 'Less Than',
   greaterThanOrEqual: 'Greater Than or Equal',
   lessThanOrEqual: 'Less Than or Equal',
   
-  // Date/Amount operators
+  // Date/Amount operators - for range filtering
   between: 'Between',
   
-  // Select operators
+  // Select operators - for categorical fields
   is: 'Is',
   isNot: 'Is Not',
   in: 'In',
   notIn: 'Not In',
 };
 
+/**
+ * Complete list of field definitions used in the application
+ * Each field definition specifies its type, available operators, and options (if applicable)
+ * This configuration drives the filter builder UI
+ */
 export const fieldDefinitions: FieldDefinition[] = [
-  // Text fields
+  // ===== TEXT FIELDS =====
+  // Text fields support substring matching and pattern-based operators
   {
     key: 'name',
     label: 'Name',
     type: 'text',
+    // Text operators: exact match, substring search, prefix/suffix matching
     operators: ['equals', 'contains', 'startsWith', 'endsWith', 'doesNotContain'],
   },
   {
@@ -48,12 +61,14 @@ export const fieldDefinitions: FieldDefinition[] = [
     operators: ['equals', 'contains', 'startsWith', 'endsWith', 'doesNotContain'],
   },
   
-  // Single select fields
+  // ===== SINGLE SELECT FIELDS =====
+  // Users must select exactly one option from a predefined list
   {
     key: 'department',
     label: 'Department',
     type: 'singleSelect',
     operators: ['is', 'isNot'],
+    // Define the available department options
     options: [
       { value: 'Engineering', label: 'Engineering' },
       { value: 'Sales', label: 'Sales' },
@@ -64,7 +79,8 @@ export const fieldDefinitions: FieldDefinition[] = [
     ],
   },
   
-  // Number fields
+  // ===== NUMERIC FIELDS =====
+  // Number fields support range comparisons: >, <, >=, <=, equals
   {
     key: 'salary',
     label: 'Salary',
@@ -84,7 +100,8 @@ export const fieldDefinitions: FieldDefinition[] = [
     operators: ['equals', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'],
   },
   
-  // Date fields
+  // ===== DATE FIELDS =====
+  // Date fields support between operator for range filtering
   {
     key: 'joinDate',
     label: 'Join Date',
@@ -98,21 +115,26 @@ export const fieldDefinitions: FieldDefinition[] = [
     operators: ['between'],
   },
   
-  // Amount field
+  // ===== AMOUNT/CURRENCY FIELD =====
+  // Currency range filter - supports "between" operator for min/max ranges
   {
     key: 'salaryRange',
     label: 'Salary Range',
     type: 'amount',
     operators: ['between'],
-    path: 'salary', // Maps to salary field
+    // Maps to the salary field in the actual data structure
+    path: 'salary',
   },
   
-  // Multi-select field
+  // ===== MULTI-SELECT FIELD =====
+  // Users can select multiple options from a predefined list
+  // Supports "in" (has any) and "notIn" (has none) operators
   {
     key: 'skills',
     label: 'Skills',
     type: 'multiSelect',
     operators: ['in', 'notIn'],
+    // Define available skills that employees can have
     options: [
       { value: 'React', label: 'React' },
       { value: 'TypeScript', label: 'TypeScript' },
@@ -127,7 +149,8 @@ export const fieldDefinitions: FieldDefinition[] = [
     ],
   },
   
-  // Boolean field
+  // ===== BOOLEAN FIELD =====
+  // True/false field for binary status indicators
   {
     key: 'isActive',
     label: 'Active Status',
@@ -135,12 +158,14 @@ export const fieldDefinitions: FieldDefinition[] = [
     operators: ['is'],
   },
   
-  // Nested object field
+  // ===== NESTED OBJECT FIELDS =====
+  // These fields demonstrate filtering on nested properties (e.g., address.city)
   {
     key: 'address.city',
     label: 'City',
     type: 'text',
     operators: ['equals', 'contains', 'startsWith', 'endsWith', 'doesNotContain'],
+    // The 'path' property tells the filter engine where to find this value in the data
     path: 'address.city',
   },
   {
@@ -148,14 +173,28 @@ export const fieldDefinitions: FieldDefinition[] = [
     label: 'State',
     type: 'text',
     operators: ['equals', 'contains', 'startsWith', 'endsWith', 'doesNotContain'],
+    // The 'path' property tells the filter engine where to find this value in the data
     path: 'address.state',
   },
 ];
 
+/**
+ * Look up a field definition by its key
+ * Returns the complete field configuration including type and operators
+ * Returns undefined if the field is not found
+ * @param fieldKey - The unique identifier for the field
+ * @returns The field definition or undefined
+ */
 export const getFieldDefinition = (fieldKey: string): FieldDefinition | undefined => {
   return fieldDefinitions.find(f => f.key === fieldKey);
 };
 
+/**
+ * Get all available operators for a specific field
+ * Returns an empty array if the field is not found
+ * @param fieldKey - The unique identifier for the field
+ * @returns Array of operator keys for this field
+ */
 export const getOperatorsForField = (fieldKey: string): Operator[] => {
   const field = getFieldDefinition(fieldKey);
   return field?.operators || [];
